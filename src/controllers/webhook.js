@@ -5,6 +5,7 @@ const twilio = require('../service/twilioService');
 const mandrill = require('../service/nodemailerService');
 const moment = require('moment');
 const facee = require('../service/sdkfacebookService');
+const Formdata = require('../model/formdata');
 
 
 const token = process.env.TOKEN_SUSBCRIPTION_FACE || 'token';
@@ -76,6 +77,9 @@ const postWebhookFace = (req, res) => {
 
                 // registrar data de leadgen
                 dataform = {};
+                let fdata = new Formdata();
+                dataform = fdata.formatleaddata(result_data.field_data);
+                /*
                 result_data.field_data.forEach(async(eldata) => {
                     if (eldata.name == 'phone_number') {
                         dataform[eldata.name] = '5585353729'; // eldata.values[0].slice(2);
@@ -89,6 +93,8 @@ const postWebhookFace = (req, res) => {
                     dataform['id'] = result_data.id;
                     dataform['created_time'] = result_data.created_time;
                 });
+                */
+                console.log(dataform);
                 await mysql.query("INSERT INTO go_social_webhook_data SET ?", dataform);
                 console.log("REGISTRADO en go_social_webhook_data");
 
