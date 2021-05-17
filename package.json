@@ -1,0 +1,37 @@
+{
+    "name": "goautodial-node",
+    "version": "1.0.0",
+    "description": "Servicio para webhook y realtime",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "engines": {
+        "node": "11.2.0"
+    },
+    "keywords": [
+        "nodejs",
+        "express",
+        "docker",
+        "sockets"
+    ],
+    "author": "mark cornejo",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-x-hub": "^1.0.4",
+        "facebook-nodejs-business-sdk": "^10.0.0",
+        "fb": "^2.0.0",
+        "handlebars": "^4.7.7",
+        "moment": "^2.29.1",
+        "mysql": "^2.18.1",
+        "nodemailer": "^6.5.0",
+        "nodemailer-mandrill-transport": "^1.2.0",
+        "socket.io": "^4.0.1",
+        "twilio": "^3.60.0"
+    }
+}
