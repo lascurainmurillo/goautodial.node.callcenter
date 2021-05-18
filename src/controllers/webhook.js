@@ -94,9 +94,12 @@ const postWebhookFace = (req, res) => {
                     dataform['created_time'] = result_data.created_time;
                 });
                 */
+                console.log("-------------------------- INICIO DATAFORM-------------------------");
                 console.log(dataform);
-                await mysql.query("INSERT INTO go_social_webhook_data SET ?", dataform);
-                console.log("REGISTRADO en go_social_webhook_data");
+                console.log("-------------------------- FIN DATAFORM-------------------------");
+                // return false;
+                // await mysql.query("INSERT INTO go_social_webhook_data SET ?", dataform);
+                // console.log("REGISTRADO en go_social_webhook_data");
 
                 const entry_date = moment().format('YYYY-MM-DD HH:mm:ss');
 
@@ -104,11 +107,11 @@ const postWebhookFace = (req, res) => {
                 dataform['status'] = 'NEW';
                 dataform['list_id'] = '1004'; // falta considerar este dato OJO
                 dataform['gmt_offset_now'] = -6.00; // obtener segun el codigo postal o el pais
-                dataform['phone_code'] = '52'; // obtener segun el pais o como lo entrega facebook
+                // dataform['phone_code'] = '52'; // obtener segun el pais o como lo entrega facebook
                 // dataform['city'] = ;
-                dataform['country_code'] = dataform.phone_code;
+                // dataform['country_code'] = dataform.phone_code;
                 // dataform['gender'] = ;
-                dataform['date_of_birth'] = '0000-00-00';
+                // dataform['date_of_birth'] = '0000-00-00';
                 dataform['last_local_call_time'] = '0000-00-00 00:00:00';
                 dataform['social_form_id'] = elchange.value.form_id; // id del formulario de facebook
                 dataform['social_form_data'] = JSON.stringify(await facee.getDataFormLead(elchange.value.form_id, leadgen.access_token));
@@ -120,7 +123,7 @@ const postWebhookFace = (req, res) => {
                 delete dataform.created_time;
                 console.log("VER DATA FORM -------------------------------------------");
                 console.log(dataform);
-
+                console.log("FINN VER DATA FORM -------------------------------------------");
                 // registrar en la cola de llamadas VICIDIAL_LIST
                 let row_vicial = await mysql.query_asterisk("INSERT INTO vicidial_list SET ?", dataform);
                 console.log("REGISTRADO vicidial_list")
