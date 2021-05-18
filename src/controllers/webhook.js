@@ -78,52 +78,29 @@ const postWebhookFace = (req, res) => {
                 // registrar data de leadgen
                 dataform = {};
                 let fdata = new Formdata();
+                // obtener name field de formulario de facebook
                 dataform = fdata.formatleaddata(result_data.field_data);
-                /*
-                result_data.field_data.forEach(async(eldata) => {
-                    if (eldata.name == 'phone_number') {
-                        dataform[eldata.name] = '5585353729'; // eldata.values[0].slice(2);
-                    } else if (eldata.name == 'full_name') {
-                        dataform['first_name'] = eldata.values[0];
-                        dataform['last_name'] = '';
-                    } else {
-                        dataform[eldata.name] = eldata.values[0];
-                    }
 
-                    dataform['id'] = result_data.id;
-                    dataform['created_time'] = result_data.created_time;
-                });
-                */
-                console.log("-------------------------- INICIO DATAFORM-------------------------");
-                console.log(dataform);
-                console.log("-------------------------- FIN DATAFORM-------------------------");
-                // return false;
                 // await mysql.query("INSERT INTO go_social_webhook_data SET ?", dataform);
                 // console.log("REGISTRADO en go_social_webhook_data");
-
                 const entry_date = moment().format('YYYY-MM-DD HH:mm:ss');
 
                 dataform['entry_date'] = entry_date; // `${yyyy}-${mm}-${dd} ${ho}:${mi}:${se}`;
                 dataform['status'] = 'NEW';
                 dataform['list_id'] = '1004'; // falta considerar este dato OJO
                 dataform['gmt_offset_now'] = -6.00; // obtener segun el codigo postal o el pais
-                // dataform['phone_code'] = '52'; // obtener segun el pais o como lo entrega facebook
-                // dataform['city'] = ;
-                // dataform['country_code'] = dataform.phone_code;
-                // dataform['gender'] = ;
-                // dataform['date_of_birth'] = '0000-00-00';
                 dataform['last_local_call_time'] = '0000-00-00 00:00:00';
                 dataform['social_form_id'] = elchange.value.form_id; // id del formulario de facebook
                 dataform['social_form_data'] = JSON.stringify(await facee.getDataFormLead(elchange.value.form_id, leadgen.access_token));
 
+                console.log("-------------------------- INICIO DATAFORM-------------------------");
+                console.log(dataform);
+                console.log("-------------------------- FIN DATAFORM-------------------------");
                 /*INSERT INTO `asterisk`.
                 `vicidial_list` (`lead_id`, `entry_date`, `modify_date`, `status`, `list_id`, `gmt_offset_now`, `phone_code`, `phone_number`, `first_name`, `last_name`, `address1`, `country_code`, `date_of_birth`, `email`, `last_local_call_time`, `rank`) VALUES(null, '2021-04-24 22:55:01', '2021-04-24 22:59:01', 'NEW', '1004', '-5.00', '52', '5585353729', 'Moises', 'Lascurain', 'jr. Mexico', '52', '1985-04-13', 'lascurainmurillo@gmail.com', '0000-00-00 00:00:00', 0);*/
 
                 delete dataform.id
                 delete dataform.created_time;
-                console.log("VER DATA FORM -------------------------------------------");
-                console.log(dataform);
-                console.log("FINN VER DATA FORM -------------------------------------------");
                 // registrar en la cola de llamadas VICIDIAL_LIST
                 let row_vicial = await mysql.query_asterisk("INSERT INTO vicidial_list SET ?", dataform);
                 console.log("REGISTRADO vicidial_list")
@@ -133,7 +110,7 @@ const postWebhookFace = (req, res) => {
                     campaign_id: '11340326', // id de la campaña = valor estatico
                     status: 'READY',
                     list_id: 1004,
-                    gmt_offset_now: -5.00,
+                    gmt_offset_now: -6.00,
                     alt_dial: 'NONE',
                     priority: 10,
                     source: 'S'

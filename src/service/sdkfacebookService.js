@@ -22,12 +22,12 @@ const getDataFormLead = async(form_id, access_token) => {
     }
 
     //obtener imagen
-    if (form.context_card.cover_photo.id) {
+    if (typeof(form.context_card.cover_photo.id) != 'undefined') {
         try {
             var form_image = await FB.api("/" + form.context_card.cover_photo.id + "?fields=images");
             console.log("obteniendo imagenes de form lead facebook ------------------------");
             // console.log(form_image);
-            let image = form_image.images.filter((a) => { if (a.height == '600') return a; });
+            let image = form_image.images.filter((a) => { if ('300' <= a.height && a.height <= '600') return a; });
             form.image = image[0];
             console.log(form_image);
         } catch (error) {
@@ -41,6 +41,7 @@ const getDataFormLead = async(form_id, access_token) => {
     }
     console.log("data de form lead -------------------------");
     console.log(form);
+    console.log("FIN data de form lead -------------------------");
     return form;
 
 }

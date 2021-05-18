@@ -17,7 +17,7 @@ Formdata.prototype.formatleaddata = function(data) {
                 dataform['first_name'] = eldata.values[0];
                 dataform['last_name'] = '';
             } else {
-                dataform[eldata.name] = eldata.values[0];
+                dataform[elem] = eldata.values[0];
             }
         } else {
             dataother[eldata.name] = eldata.values[0];
@@ -29,7 +29,7 @@ Formdata.prototype.formatleaddata = function(data) {
     });
 
     if (dataother) {
-        dataform['dataother'] = dataother;
+        dataform['dataother'] = JSON.stringify(dataother);
     }
 
     return dataform;
@@ -61,7 +61,7 @@ const lang_field = function(field) {
         'país': 'country', // español
 
         'post_code': 'postal_code', // ingles
-        'código_postal': 'post_code', // español
+        'código_postal': 'postal_code', // español
 
         'date_of_birth': 'date_of_birth', // ingles
         'fecha_de_nacimiento': 'date_of_birth', // español
