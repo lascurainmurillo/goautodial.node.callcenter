@@ -10,7 +10,7 @@ Formdata.prototype.formatleaddata = function(data) {
     data.forEach(async(eldata) => {
         if (elem = lang_field(eldata.name)) {
             if (elem == 'phone_number') {
-                dataform[elem] = eldata.values[0].slice(2);
+                dataform[elem] = eldata.values[0].slice(3); // para codigos con simbolos '+' y de digitos. Por ejemplo +52  ,  +51
                 dataform['phone_code'] = eldata.values[0].slice(1, 3);
                 dataform['country_code'] = eldata.values[0].slice(1, 3);
             } else if (elem == 'full_name') {
