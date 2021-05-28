@@ -12,25 +12,11 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './env/.env' });
 
 const bodyParser = require('body-parser');
-const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const socketIO = require('socket.io');
 const express = require('express');
 const cors = require('cors');
-
-// Certificate
-
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/go.callmarket.cc/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/go.callmarket.cc/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/go.callmarket.cc/chain.pem', 'utf8');
-
-const credentials = {
-    key: privateKey,
-    cert: certificate,
-    ca: ca
-};
-
 
 const allroutes = require('./src/routes');
 
@@ -60,35 +46,16 @@ app.use('/', (req, res) => {
 });
 
 let server = http.createServer(app);
-let httpsServer = https.createServer(credentials, app);
 
-// cors de socket.io
-let io = socketIO(server, {
-    cors: {
-        origin: process.env.DOMAIN // "https://callcenter.net",
-            //methods: ["GET", "POST"]
-    }
-});
+// Certificate
+// let httpsServer = require('./certificate.js')(app);
 
-// definir en variable el socketio configuration
-app.set('socketio', io);
+// Sockets
+const sockets_c = require('./src/service/socketsService').socket_connection(server, app);
 
-// Connection socket
-io.on('connection', (socket) => {
-    console.log("A new user just connectedd");
-
-    socket.on('disconnect', () => {
-        console.log('USer was disconnected');
-    })
-});
-
-/*app.all('*', (req, res) => {
-    res.send("You've tried reaching a route that doesn't exist.");
-})*/
 
 // Levantar el servidor http
-// server.listen(port, 'localhost', () => console.log(`Servidor ejecutandose en el puerto: ${process.env.DOMAIN}`));
 server.listen(port, () => console.log(`Servidor ejecutandose en el puerto: ${process.env.DOMAIN}`));
 
 // levantar el servidor https
-httpsServer.listen(port_https, 'localhost', () => console.log(`Servidor ejecutandose en el puerto: https:// ${process.env.DOMAIN}`));
+// httpsServer.listen(port_https, 'localhost', () => console.log(`Servidor ejecutandose en el puerto: https:// ${process.env.DOMAIN}`));
