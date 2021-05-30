@@ -18,6 +18,15 @@ const socketIO = require('socket.io');
 const express = require('express');
 const cors = require('cors');
 
+
+
+// conectar a la base de datos
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/chatwhatsapp', { useNewUrlParser: true })
+    .then(db => console.log('!Mongo está conectado'))
+    .catch(err => console.log(err));
+
+
 const allroutes = require('./src/routes');
 
 const { json, urlencoded } = express;

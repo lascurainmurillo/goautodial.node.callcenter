@@ -1,5 +1,6 @@
 const socketIO = require('socket.io');
 const Chat = require('../model/chat');
+const moment = require('moment');
 const chatmodel = new Chat();
 
 const socket_connection = (server, app) => {
@@ -16,36 +17,31 @@ const socket_connection = (server, app) => {
     const botName = 'ChatCord Bot';
     // definir en variable el socketio configuration
     // app.set('socketio', io);
-
     // Connection socket
     io.on('connection', (socket) => {
+        console.log("Un nuevo usuario conectado");
 
-        socket.on('joinRoom', ({ username, client, room }) => {
+        socket.on('joinRoom', async(data_room) => {
 
-            const user = chatmodel.userJoin(socket.id, username, client, room);
+            const user = await chatmodel.userJoin(socket.id, data_room);
             socket.join(user.room);
-
-            // Send users and room info
+            // Enviar usuarios e infos
             io.to(user.room).emit('roomUsers', {
-                room: user.room,
-                users: chatmodel.getRoomUsers(user.room),
+                room: user.room, // phone number
+                clients: await chatmodel.getRoomUsers(user.agent_username),
             });
 
         });
 
-        console.log("Un nuevo usuario conectado");
-        socket.emit('message', formatMessage(botName, 'Bienvenido Chatbots!'));
-
         // Escuchar chat_mensajes
-        socket.on('chatMessage', msg => {
-            console.log(msg);
-            // const user = getCurrentUser(socket.id);
-            // io.to(user.room).emit('message', formatMessage(user.username, msg));
-            io.emit('message', formatMessage('Usuario', msg));
+        socket.on('chatMessage', (data_call) => {
+            // console.log(data_call);
+            chatmodel.saveMessage(socket.id, data_call);
+            io.to(data_call.room).emit('message', { user: data_call.sender.user, msg: data_call.sender.msg, create_at: moment().format('h:mm a') });
         });
 
         socket.on('disconnect', () => {
-            console.log('USer was disconnected');
+            console.log('User was disconnected');
         })
     });
 
