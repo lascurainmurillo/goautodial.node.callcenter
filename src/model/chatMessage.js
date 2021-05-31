@@ -8,9 +8,14 @@ const ChatSchema = new Schema({
     client_name: String,
     list_id: Number,
     room: String,
-    sender: {
+    message: {
         user: String,
         msg: String,
+        tipo: String,
+        time: {
+            type: Date,
+            default: Date.now
+        }
     },
     created_at: {
         type: Date,

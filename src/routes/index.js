@@ -16,5 +16,9 @@ router.post('/webhookface', ConTrollerWebhook.postWebhookFace);
 router.get('/webhookInst', ConTrollerWebhook.getWebhook);
 router.post('/webhookinst', ConTrollerWebhook.postWebhookInst);
 
+/* Route twilio */
+const Controllertwilio = require('../controllers/twilio');
+router.post('/whatsapp/receiver', Controllertwilio.whatReceiver); //recibe mensaje whatsapp de un numero externo
+
 module.exports = router;
 // export default router;

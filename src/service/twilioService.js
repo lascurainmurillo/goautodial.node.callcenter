@@ -12,9 +12,11 @@ const client = require('twilio')(accountSid, authToken);
  * @param string user_fullname
  * 
  */
-const sendMenssageSimple = (user_phone_number, user_fullname) => {
+const sendMenssageSimple = (user_phone_number, user_fullname = null, msg = null) => {
 
-    msg = `Hola ${user_fullname}, gracias por enviar tu información, estaremos llamandote en unos momentos.`
+    if (!msg) {
+        msg = `Hola ${user_fullname}, gracias por enviar tu información, estaremos llamandote en unos momentos.`
+    }
 
     client.messages
         .create({
