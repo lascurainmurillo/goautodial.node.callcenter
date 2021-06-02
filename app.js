@@ -43,9 +43,9 @@ const corsOptions = {
 app.use(express.static(__dirname + '/public'));
 app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET_FACE }));
 app.use(cors(corsOptions));
-app.use(allroutes);
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(urlencoded({ extended: false }));
+app.use(allroutes);
 
 const port = process.env.PORT || 3001;
 const port_https = process.env.PORT || 3002;

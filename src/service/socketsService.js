@@ -2,7 +2,8 @@ const socketIO = require('socket.io');
 const Chat = require('../model/chat');
 const moment = require('moment');
 const chatmodel = new Chat();
-const twilio = require('../service/twilioService');
+// const twilio = require('../service/twilioService');
+const chatapi = require('../service/chatapiService');
 
 const socket_connection = (server, app) => {
 
@@ -17,7 +18,7 @@ const socket_connection = (server, app) => {
 
     const botName = 'ChatCord Bot';
     // definir en variable el socketio configuration
-    // app.set('socketio', io);
+    app.set('socketio', io);
     // Connection socket
     io.on('connection', (socket) => {
         console.log("Un nuevo usuario conectado");
@@ -32,7 +33,7 @@ const socket_connection = (server, app) => {
             if (reg_client.length == "0") {
                 reg_client.push(data);
             }
-
+            console.log(data.room);
             io.to(data.room).emit('roomUsers', {
                 room: data.room, // phone number
                 clients: reg_client,
@@ -42,15 +43,23 @@ const socket_connection = (server, app) => {
 
         // Escuchar chat_mensajes
         socket.on('chatMessage', (data_call) => {
-            // console.log(data_call);
+            // guardar mensaje en mongo
             chatmodel.saveMessage(socket.id, data_call);
 
             // enviar mensaje a WHATSAPP
-            twilio.sendMenssageSimple(data_call.client_id, 'Agent', data_call.message.msg);
+            chatapi.sendMessageWhat(data_call.client_id, 'Agent', data_call.message.msg);
 
             // emitiendo mensaje al fronend chat
             io.to(data_call.room).emit('message', { user: data_call.message.user, msg: data_call.message.msg, type: data_call.message.tipo, time: moment().format('h:mm a') });
         });
+
+        /*
+        socket.on('whatss', (data) => {
+            console.log("estoy en whatsssss");
+            console.log(data);
+            io.to(data.room).emit(data);
+        });
+        */
 
         socket.on('disconnect', () => {
             console.log('User was disconnected');

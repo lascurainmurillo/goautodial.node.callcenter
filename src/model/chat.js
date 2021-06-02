@@ -48,7 +48,7 @@ Chat.prototype.userLeave = function(id) {
 
 Chat.prototype.saveMessage = function(socket_id, data_call) {
     data_call.socket_id = socket_id;
-    console.log(data_call);
+    // console.log(data_call);
     var newJoin = new ChatCollection(data_call);
     newJoin.save();
     // return moment().format('h:mm a');
@@ -89,6 +89,15 @@ Chat.prototype.getRoomUsers = async(agent_username, client_id = null) => {
         var room_clients = room_all.filter(room => (room.agent_username === agent_username && room.client_id === client_id));
     }
     return room_clients; // rooms.filter(user => user.room === room);
+}
+
+/**
+ * 
+ * 
+ * 
+ */
+Chat.prototype.verifyRoom = async(room) => {
+    return await ChatCollection.find({ room }).limit(1);
 }
 
 module.exports = Chat;

@@ -1,7 +1,8 @@
 const mysql = require('../../database/db');
 const leadgen = require('../service/webhookleadgen');
 const ControllerIndex = require('./index');
-const twilio = require('../service/twilioService');
+// const twilio = require('../service/twilioService');
+const chatapi = require('../service/chatapiService');
 const mandrill = require('../service/nodemailerService');
 const moment = require('moment');
 const facee = require('../service/sdkfacebookService');
@@ -121,7 +122,7 @@ const postWebhookFace = (req, res) => {
                 console.log("REGISTRADO vicidial_hopper")
 
                 // enviar mensaje a WHATSAPP
-                twilio.sendMenssageSimple(dataform.phone_number, dataform.full_name);
+                chatapi.sendMessageWhat(dataform.phone_number, dataform.full_name);
                 console.log("WHATSAPP ENVIADO")
 
                 // enviar email
