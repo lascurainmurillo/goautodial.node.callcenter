@@ -3,10 +3,11 @@ const moment = require('moment');
 const Chat = require('../model/chat');
 const list_id = process.env.LIST_ID;
 const number_phone = process.env.FROM_WHATSAPP;
+const chatmodel = new Chat(); // crear instancia de chat
 
 const whatReceiver = (req, res) => {
 
-    const chatmodel = new Chat(); // crear instancia de chat
+
     const io = req.app.get('socketio'); // invocar a socket io
     console.log("-------------------- EN WHAT RECEIVER --------------------");
     console.log(req.body);
@@ -39,8 +40,7 @@ const whatReceiver = (req, res) => {
                 chatmodel.saveMessage(null, data_call);
 
                 // Emitir mensajes al dashboard Agent
-                io.sockets.to(room).emit('message', { user: data_call.client_name, msg: el.body, type: 'receiver', time: moment().format('h:mm a') });
-                // console.log("dsdsdsdsdsdsdsd");
+                io.sockets.to(room).emit('message', { user: data_call.client_name, msg: el.body, tipo: 'receiver', time: moment().format('h:mm a') });
                 // io.emit('whatss', { user: data_call.client_name, msg: el.body, type: 'receiver', time: moment().format('h:mm a'), room });
 
             }
@@ -50,9 +50,21 @@ const whatReceiver = (req, res) => {
             var type = el.type;*/
         }
     });
-
     // var respuesta = twilio.whatsReceiver();
     res.sendStatus(200);
+}
+
+/**
+ * 
+ * Enviar mensajes de Whatsapp OJOOOOOOOOOOOOOOOOOOOOOO NO OLVIDAR PONERLE SEGURIDAD
+ * @param {*} req 
+ * @param {*} res 
+ * 
+ */
+const getMessages = async(req, res) => {
+    // console.log(req.query.room);
+    var data = await chatmodel.getMessage(req.query.room);
+    res.send(data);
 }
 
 const whatReceiver1 = (req, res) => {
@@ -72,4 +84,5 @@ module.exports = {
     whatReceiver: whatReceiver,
     whatReceiver1: whatReceiver1,
     whatSend: whatSend,
+    getMessages: getMessages,
 };

@@ -1,4 +1,5 @@
 const moment = require('moment');
+const { prototype } = require('twilio/lib/jwt/taskrouter/TaskRouterCapability');
 const ChatCollection = require('./chatMessage');
 
 function Chat() {
@@ -47,11 +48,22 @@ Chat.prototype.userLeave = function(id) {
 }
 
 Chat.prototype.saveMessage = function(socket_id, data_call) {
+    console.log("--- entrando a guardar mensaje ----");
     data_call.socket_id = socket_id;
-    // console.log(data_call);
     var newJoin = new ChatCollection(data_call);
     newJoin.save();
     // return moment().format('h:mm a');
+}
+
+Chat.prototype.getMessage = async(room, ini = 0) => {
+    // return ChatCollection.find({ room }, {}, { sort: { 'created_at': -1 } }).limit(10);
+    var cou = await ChatCollection.find({ room }).count();
+    if (cou > 20) {
+        cou = cou - 20;
+        return ChatCollection.find({ room }).skip(cou); // .limit(10);
+    } else {
+        return ChatCollection.find({ room }); // .limit(10);
+    }
 }
 
 // Obtener salones usuarios para un agente

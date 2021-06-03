@@ -1,14 +1,17 @@
 const mysql = require('../../database/db');
-const leadgen = require('../service/webhookleadgen');
 const ControllerIndex = require('./index');
+
 // const twilio = require('../service/twilioService');
+const leadgen = require('../service/webhookleadgen');
 const chatapi = require('../service/chatapiService');
 const mandrill = require('../service/nodemailerService');
-const moment = require('moment');
 const facee = require('../service/sdkfacebookService');
+
+const moment = require('moment');
+const Chat = require('../model/chat');
 const Formdata = require('../model/formdata');
 
-
+const list_id = process.env.LIST_ID;
 const token = process.env.TOKEN_SUSBCRIPTION_FACE || 'token';
 
 
@@ -29,6 +32,7 @@ const getWebhook = (req, res) => {
 const postWebhookFace = (req, res) => {
 
     console.log('Facebook request body:', req.body);
+    const chatmodel = new Chat();
 
     if (!req.isXHubValid()) {
         console.log('Warning - request header X-Hub-Signature not present or invalid');
@@ -110,7 +114,7 @@ const postWebhookFace = (req, res) => {
                     lead_id: row_vicial.insertId,
                     campaign_id: '11340326', // id de la campaña = valor estatico
                     status: 'READY',
-                    list_id: 1004,
+                    list_id, // list_id capañama = valor estatico
                     gmt_offset_now: -6.00,
                     alt_dial: 'NONE',
                     priority: 10,
@@ -121,7 +125,23 @@ const postWebhookFace = (req, res) => {
                 await mysql.query_asterisk("INSERT INTO vicidial_hopper SET ?", datahopper);
                 console.log("REGISTRADO vicidial_hopper")
 
-                // enviar mensaje a WHATSAPP
+
+                let data_call = {
+                    // agent_username: dataroom[0].agent_username,
+                    client_id: dataform.phone_number,
+                    client_name: dataform.full_name,
+                    list_id,
+                    room: dataform.phone_number, // phone number
+                    message: {
+                        user: dataform.full_name,
+                        msg: `Hola ${dataform.full_name}, gracias por enviar tu información, estaremos llamandote en unos momentos.`,
+                        tipo: 'sender',
+                    },
+                }
+
+                // enviar y guardar mensaje a WHATSAPP
+                await chatmodel.saveMessage(null, data_call);
+                console.log("---- guardando chat en leaged");
                 chatapi.sendMessageWhat(dataform.phone_number, dataform.full_name);
                 console.log("WHATSAPP ENVIADO")
 

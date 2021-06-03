@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const moment = require('moment');
 
 const ChatSchema = new Schema({
     socket_id: String,
@@ -13,8 +14,8 @@ const ChatSchema = new Schema({
         msg: String,
         tipo: String,
         time: {
-            type: Date,
-            default: Date.now
+            type: String,
+            default: moment().format('h:mm a')
         }
     },
     created_at: {

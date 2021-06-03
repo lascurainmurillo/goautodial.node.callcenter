@@ -50,7 +50,7 @@ const socket_connection = (server, app) => {
             chatapi.sendMessageWhat(data_call.client_id, 'Agent', data_call.message.msg);
 
             // emitiendo mensaje al fronend chat
-            io.to(data_call.room).emit('message', { user: data_call.message.user, msg: data_call.message.msg, type: data_call.message.tipo, time: moment().format('h:mm a') });
+            io.to(data_call.room).emit('message', { user: data_call.message.user, msg: data_call.message.msg, tipo: data_call.message.tipo, time: moment().format('h:mm a') });
         });
 
         /*
