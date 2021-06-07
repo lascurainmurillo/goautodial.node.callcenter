@@ -26,19 +26,31 @@ const socket_connection = (server, app) => {
         socket.on('joinRoom', async(data) => {
 
             // const user = await chatmodel.userRoomsJoin(socket.id, data);
-            socket.join(data.room);
+            // socket.join(data.room);
             // Enviar usuarios e infos
-            var reg_client = await chatmodel.getRoomUsers(data.agent_username, data.client_id);
-            console.log(reg_client);
-            if (reg_client.length == "0") {
+            var reg_client = await chatmodel.getRoomUsers(data.agent_username);
+            if (data.room != null && reg_client.find(el => el.room == data.room) == null) {
                 reg_client.push(data);
             }
-            console.log(data.room);
-            io.to(data.room).emit('roomUsers', {
-                room: data.room, // phone number
-                clients: reg_client,
+
+            reg_client.forEach(el => {
+                socket.join(el.room);
             });
 
+            console.log(reg_client);
+            if (data.room != null) {
+                console.log("emitiendo room: " + data.room);
+                io.to(data.room).emit('roomUsers', {
+                    room: data.room, // phone number
+                    agent_fromsocket: data.agent_username
+                });
+            } else if (reg_client.length > 0) {
+                console.log("emitiendo room reg_client: " + reg_client[0].room);
+                io.to(reg_client[0].room).emit('roomUsers', {
+                    room: reg_client[0].room, // phone number
+                    agent_fromsocket: data.agent_username
+                });
+            }
         });
 
         // Escuchar chat_mensajes
@@ -50,9 +62,8 @@ const socket_connection = (server, app) => {
             chatapi.sendMessageWhat(data_call.client_id, 'Agent', data_call.message.msg);
 
             // emitiendo mensaje al fronend chat
-            io.to(data_call.room).emit('message', { user: data_call.message.user, msg: data_call.message.msg, tipo: data_call.message.tipo, time: moment().format('h:mm a') });
+            io.to(data_call.room).emit('message', { user: data_call.message.user, msg: data_call.message.msg, tipo: data_call.message.tipo, time: Date.now(), caption: null, send_tipo: null, room: data_call.client_id });
         });
-
         /*
         socket.on('whatss', (data) => {
             console.log("estoy en whatsssss");
@@ -60,9 +71,13 @@ const socket_connection = (server, app) => {
             io.to(data.room).emit(data);
         });
         */
-
         socket.on('disconnect', () => {
             console.log('User was disconnected');
+            var self = this;
+            if (self.rooms != null) {
+                var rooms = Object.keys(self.rooms);
+            }
+            console.log(rooms);
         })
     });
 

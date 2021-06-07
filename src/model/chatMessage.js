@@ -13,14 +13,13 @@ const ChatSchema = new Schema({
         user: String,
         msg: String,
         tipo: String,
-        time: {
-            type: String,
-            default: moment().format('h:mm a')
-        }
+        time: Number,
+        caption: String,
+        send_tipo: String
     },
     created_at: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     }
 });
 

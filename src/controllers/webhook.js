@@ -136,6 +136,8 @@ const postWebhookFace = (req, res) => {
                         user: dataform.full_name,
                         msg: `Hola ${dataform.full_name}, gracias por enviar tu información, estaremos llamandote en unos momentos.`,
                         tipo: 'sender',
+                        caption: null,
+                        send_tipo: 'chat'
                     },
                 }
 

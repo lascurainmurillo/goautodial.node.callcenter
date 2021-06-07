@@ -22,7 +22,8 @@ const Controllertwilio = require('../controllers/twilio.js');
 router.post('/whatsapp/receiver', Controllertwilio.whatReceiver); //recibe mensaje whatsapp de un numero externo
 router.post('/whatsapp/receiver1', Controllertwilio.whatReceiver1);
 router.get('/whatsapp/send', Controllertwilio.whatSend);
-router.get('/whatsapp/message', Controllertwilio.getMessages);
+router.get('/whatsapp/message', Controllertwilio.getMessages); //enviar mensajes anteriores de whatsapp
+router.get('/whatsapp/rooms', Controllertwilio.getRoomUsers); // enviar la lista de rooms de whatsapp
 
 module.exports = router;
 // export default router;
