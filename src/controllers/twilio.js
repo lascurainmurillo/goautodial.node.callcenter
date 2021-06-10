@@ -77,7 +77,7 @@ const saveSendMessageWhat = function(room, dataroom, el, tipo, user, io) {
  */
 const getMessages = async(req, res) => {
     // console.log(req.query.room);
-    var data = await chatmodel.getMessage(req.query.room);
+    var data = await chatmodel.getMessage(req.query.room, req.query.date);
     res.send(data);
 }
 
