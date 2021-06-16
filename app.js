@@ -61,8 +61,8 @@ app.use('/', (req, res) => {
 
 let server = http.createServer(app);
 
-// Certificate
-let httpsServer = require('./certificate.js')(app);
+// certificate
+let httpsServer = require('./certificate').httpsServer(app);
 
 // Sockets
 const sockets_c = require('./src/service/socketsService').socket_connection(server, app);
