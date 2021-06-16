@@ -54,15 +54,24 @@ const socket_connection = (server, app) => {
         });
 
         // Escuchar chat_mensajes
-        socket.on('chatMessage', (data_call) => {
+        socket.on('chatMessage', async(data_call) => {
             // guardar mensaje en mongo
             chatmodel.saveMessage(socket.id, data_call);
 
             // enviar mensaje a WHATSAPP
-            chatapi.sendMessageWhat(data_call.client_id, 'Agent', data_call.message.msg);
+            console.log(data_call);
+            if (data_call.message.send_tipo == "video" || data_call.message.send_tipo == "image" || data_call.message.send_tipo == "document") {
+                console.log("FILEEEEEEEE");
+                var send_tipo = data_call.message.send_tipo;
+                await chatapi.sendMessageFile(data_call.client_id, data_call.message.msg, data_call.message.filename);
+            } else if (data_call.message.send_tipo == 'chat') {
+                console.log("CHATTTTTTTT");
+                var send_tipo = 'chat';
+                chatapi.sendMessageWhat(data_call.client_id, 'Agent', data_call.message.msg);
+            }
 
             // emitiendo mensaje al fronend chat
-            io.to(data_call.room).emit('message', { user: data_call.message.user, msg: data_call.message.msg, tipo: data_call.message.tipo, time: Date.now(), caption: null, send_tipo: null, room: data_call.client_id });
+            io.to(data_call.room).emit('message', { user: data_call.message.user, msg: data_call.message.msg, tipo: data_call.message.tipo, time: Date.now(), caption: null, send_tipo, room: data_call.client_id });
         });
         /*
         socket.on('whatss', (data) => {

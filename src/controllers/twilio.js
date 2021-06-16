@@ -1,6 +1,9 @@
 const chatapi = require('../service/chatapiService');
-const moment = require('moment');
+const filesservice = require('../service/filesService');
 const Chat = require('../model/chat');
+
+const moment = require('moment');
+
 const list_id = process.env.LIST_ID;
 const number_phone = process.env.FROM_WHATSAPP;
 const chatmodel = new Chat(); // crear instancia de chat
@@ -14,25 +17,27 @@ const whatReceiver = (req, res) => {
 
     req.body.messages.forEach(async(el) => {
 
-        if ('+' + el.author.slice(0, -5) != number_phone) {
-            console.log(" ---------------------- NO ES EL NUMBER PHONE ------------------------ ");
-            let room = '+' + el.author.slice(0, -5);
-            let dataroom = await chatmodel.verifyRoom(room);
-            // console.log(verify, room)
-            if (dataroom.length > 0) {
+        if (el.chatId.split('-').length <= 1) {
+            if ('+' + el.author.slice(0, -5) != number_phone) {
+                console.log(" ---------------------- NO ES EL NUMBER PHONE ------------------------ ");
+                let room = '+' + el.author.slice(0, -5);
+                let dataroom = await chatmodel.verifyRoom(room);
+                // console.log(verify, room)
+                if (dataroom.length > 0) {
 
-                saveSendMessageWhat(room, dataroom, el, 'receiver', dataroom[0].client_name, io);
+                    saveSendMessageWhat(room, dataroom, el, 'receiver', dataroom[0].client_name, io);
 
-            }
-        } else if ('+' + el.author.slice(0, -5) == number_phone && el.self == "0") {
-            console.log(" ---------------------- MENSAJE DESDE LA APP WHATSAPP ------------------------ ");
-            let room = '+' + el.chatId.slice(0, -5);
-            let dataroom = await chatmodel.verifyRoom(room);
+                }
+            } else if ('+' + el.author.slice(0, -5) == number_phone && el.self == "0") {
+                console.log(" ---------------------- MENSAJE DESDE LA APP WHATSAPP ------------------------ ");
+                let room = '+' + el.chatId.slice(0, -5);
+                let dataroom = await chatmodel.verifyRoom(room);
 
-            if (dataroom.length > 0) {
+                if (dataroom.length > 0) {
 
-                saveSendMessageWhat(room, dataroom, el, 'sender', 'APP WHATSAPP', io);
+                    saveSendMessageWhat(room, dataroom, el, 'sender', 'APP WHATSAPP', io);
 
+                }
             }
         }
     });
@@ -94,6 +99,38 @@ const getRoomUsers = async(req, res) => {
     res.send(data);
 }
 
+/**
+ * 
+ * Subir archivo para el Whatsapp OJOOOOOOOOOO NO OLVIDAR PONERLE SEGURIDAD
+ * @param {*} req 
+ * @param {*} res 
+ */
+const sendUploadFile = async(req, res) => {
+    console.log("--------------- SUBIENDO ARCHIVOS ------------------- ");
+    console.log(req.files);
+    // console.log(req.type);
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
+
+    // guardar el archivo
+    let result = await filesservice.createfile(req.files, req.headers.host);
+    if (result.status != 200) {
+        return res.status(result.status).send('Problemas al cargar el archivo al servidor.');
+    }
+
+    /*
+    if (result.tipo_file == 'video') {
+        // enviar whatsapp de video
+    } else if (result.tipo_file == 'image') {
+        // enviar whatsapp de imagen
+    } else {
+        // enviar whatsapp de archivo
+    }
+    */
+    res.send(result);
+}
+
 
 const whatReceiver1 = (req, res) => {
     res.sendStatus(200);
@@ -111,5 +148,6 @@ module.exports = {
     whatReceiver1: whatReceiver1,
     whatSend: whatSend,
     getMessages: getMessages,
-    getRoomUsers: getRoomUsers
+    getRoomUsers: getRoomUsers,
+    sendUploadFile: sendUploadFile
 };

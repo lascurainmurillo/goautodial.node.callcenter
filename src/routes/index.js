@@ -24,6 +24,7 @@ router.post('/whatsapp/receiver1', Controllertwilio.whatReceiver1);
 router.get('/whatsapp/send', Controllertwilio.whatSend);
 router.get('/whatsapp/message', Controllertwilio.getMessages); //enviar mensajes anteriores de whatsapp
 router.get('/whatsapp/rooms', Controllertwilio.getRoomUsers); // enviar la lista de rooms de whatsapp
+router.post('/whatsapp/send-file', Controllertwilio.sendUploadFile);
 
 module.exports = router;
 // export default router;

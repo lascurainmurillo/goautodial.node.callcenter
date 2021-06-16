@@ -17,7 +17,7 @@ const https = require('https');
 const socketIO = require('socket.io');
 const express = require('express');
 const cors = require('cors');
-
+const fileUpload = require('express-fileupload');
 
 
 // conectar a la base de datos
@@ -45,6 +45,11 @@ app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET_FACE }));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: __dirname + '/tmp/',
+    limits: { fileSize: 30 * 1024 * 1024 } // 30mb
+})); // upload files
 app.use(allroutes);
 
 const port = process.env.PORT || 3001;
