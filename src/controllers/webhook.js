@@ -125,27 +125,32 @@ const postWebhookFace = (req, res) => {
                 await mysql.query_asterisk("INSERT INTO vicidial_hopper SET ?", datahopper);
                 console.log("REGISTRADO vicidial_hopper")
 
+                // dar formato al numero de telefono de mexico
+                if (dataform.phone_number != null && dataform.phone_number != "") {
+                    var socket_phone_number = (dataform.phone_code == "52") ? "+" + dataform.phone_code + "1" + dataform.phone_number : "+" + dataform.phone_code + dataform.phone_number;
 
-                let data_call = {
-                    // agent_username: dataroom[0].agent_username,
-                    client_id: dataform.phone_number,
-                    client_name: dataform.full_name,
-                    list_id,
-                    room: dataform.phone_number, // phone number
-                    message: {
-                        user: dataform.full_name,
-                        msg: `Hola ${dataform.full_name}, gracias por enviar tu información, estaremos llamandote en unos momentos.`,
-                        tipo: 'sender',
-                        caption: null,
-                        send_tipo: 'chat'
-                    },
+                    let data_call = {
+                        // agent_username: dataroom[0].agent_username,
+                        client_id: dataform.phone_number,
+                        client_name: dataform.full_name,
+                        list_id,
+                        room: dataform.phone_number, // phone number
+                        message: {
+                            user: dataform.full_name,
+                            msg: `Hola ${dataform.full_name}, gracias por enviar tu información, estaremos llamandote en unos momentos.`,
+                            tipo: 'sender',
+                            caption: null,
+                            send_tipo: 'chat'
+                        },
+                    }
+
+                    // enviar y guardar mensaje a WHATSAPP
+                    await chatmodel.saveMessage(null, data_call);
+                    console.log("---- guardando chat en leaged");
+                    console.log(socket_phone_number);
+                    chatapi.sendMessageWhat(socket_phone_number, dataform.full_name);
+                    console.log("WHATSAPP ENVIADO")
                 }
-
-                // enviar y guardar mensaje a WHATSAPP
-                await chatmodel.saveMessage(null, data_call);
-                console.log("---- guardando chat en leaged");
-                chatapi.sendMessageWhat(dataform.phone_number, dataform.full_name);
-                console.log("WHATSAPP ENVIADO")
 
                 // enviar email
                 mandrill.sendEmailSimple(dataform.email, dataform.full_name);
