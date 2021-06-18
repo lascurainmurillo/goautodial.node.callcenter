@@ -132,12 +132,12 @@ const postWebhookFace = (req, res) => {
                     let data_call = {
                         // agent_username: dataroom[0].agent_username,
                         client_id: dataform.phone_number,
-                        client_name: dataform.full_name,
+                        client_name: dataform.first_name,
                         list_id,
                         room: dataform.phone_number, // phone number
                         message: {
-                            user: dataform.full_name,
-                            msg: `Hola ${dataform.full_name}, gracias por enviar tu información, estaremos llamandote en unos momentos.`,
+                            user: dataform.first_name,
+                            msg: `Hola ${dataform.first_name}, gracias por enviar tu información, estaremos llamandote en unos momentos.`,
                             tipo: 'sender',
                             caption: null,
                             send_tipo: 'chat'
@@ -148,7 +148,7 @@ const postWebhookFace = (req, res) => {
                     await chatmodel.saveMessage(null, data_call);
                     console.log("---- guardando chat en leaged");
                     console.log(socket_phone_number);
-                    chatapi.sendMessageWhat(socket_phone_number, dataform.full_name);
+                    chatapi.sendMessageWhat(socket_phone_number, dataform.first_name);
                     console.log("WHATSAPP ENVIADO")
                 }
 
