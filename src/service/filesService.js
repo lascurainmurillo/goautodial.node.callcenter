@@ -26,10 +26,10 @@ const createfile = async(file, host) => {
                 //res.status(500).send(err);
                 resolve({ status: 500 });
             }
-            resolve({ status: 200, url_file: 'https://' + host + '/assets/whatsapp-files/' + name, tipo_file: tipo[0] });
-            // res.send('File uploaded!');
+            // resolve({ status: 200, url_file: 'https://' + host + '/assets/whatsapp-files/' + name, tipo_file: tipo[0] });
+            resolve({ status: 200, url_file: 'https://c180f78489a5.ngrok.io/assets/whatsapp-files/' + name, tipo_file: tipo[0] });
             /*'https://www.dzoom.org.es/wp-content/uploads/2017/07/seebensee-2384369-810x540.jpg'*/
-            /*'https://b8ddc77d07f4.ngrok.io/assets/whatsapp-files/'*/
+            /*'https://c180f78489a5.ngrok.io/assets/whatsapp-files/'*/
         });
 
     });
