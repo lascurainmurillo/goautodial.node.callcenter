@@ -59,17 +59,17 @@ Chat.prototype.saveMessage = function(socket_id, data_call) {
 Chat.prototype.getMessage = async(room, datee, ini = 0) => {
     // return ChatCollection.find({ room }, {}, { sort: { 'created_at': -1 } }).limit(10);
     var cou = await ChatCollection.find({ room, created_at: { $lt: new Date(datee) } }).count();
-    // console.log(cou);
-    if (cou > 3) {
-        cou = cou - 3;
+
+    if (cou > 15) {
+        cou = cou - 15;
         var data = await ChatCollection.find({ room, created_at: { $lt: new Date(datee) } }).skip(cou); // .limit(10);
-        // console.log(data);
+
         data.push({ previous: true });
         return data;
-        // return ChatCollection.find({ room }).skip(cou); // .limit(10);
+
     } else if (cou > 0) {
         var data = await ChatCollection.find({ room, created_at: { $lt: new Date(datee) } }); // .limit(10);
-        // data.push({ previous: false });
+
         return data;
     } else {
         return [];
