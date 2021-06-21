@@ -131,10 +131,10 @@ const postWebhookFace = (req, res) => {
 
                     let data_call = {
                         // agent_username: dataroom[0].agent_username,
-                        client_id: dataform.phone_number,
+                        client_id: socket_phone_number,
                         client_name: dataform.first_name,
                         list_id,
-                        room: dataform.phone_number, // phone number
+                        room: socket_phone_number, // phone number
                         message: {
                             user: dataform.first_name,
                             msg: `Hola ${dataform.first_name}, gracias por enviar tu información, estaremos llamandote en unos momentos.`,
