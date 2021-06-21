@@ -125,8 +125,8 @@ const postWebhookFace = (req, res) => {
                 await mysql.query_asterisk("INSERT INTO vicidial_hopper SET ?", datahopper);
                 console.log("REGISTRADO vicidial_hopper")
 
-                // dar formato al numero de telefono de mexico
-                if (dataform.phone_number != null && dataform.phone_number != "") {
+                // dar formato al numero de telefono de mexico y validar el numero
+                if (dataform.phone_number != null && dataform.phone_number != "" && /^\d+$/.test(dataform.phone_number)) {
                     var socket_phone_number = (dataform.phone_code == "52") ? "+" + dataform.phone_code + "1" + dataform.phone_number : "+" + dataform.phone_code + dataform.phone_number;
 
                     let data_call = {
