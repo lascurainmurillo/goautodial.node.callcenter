@@ -48,7 +48,8 @@ app.use(urlencoded({ extended: false }));
 app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: __dirname + '/tmp/',
-    limits: { fileSize: 30 * 1024 * 1024 } // 30mb
+    limits: { fileSize: 30 * 1024 * 1024 }, // 30mb,
+    uploadTimeout: 10 * 60 * 1000, // 10 minutos
 })); // upload files
 app.use(allroutes);
 

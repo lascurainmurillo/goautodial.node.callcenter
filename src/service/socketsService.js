@@ -11,8 +11,8 @@ const socket_connection = (server, app) => {
 
     let io = socketIO(server, {
         cors: {
-            origin: process.env.DOMAIN // "https://callcenter.net",
-                //methods: ["GET", "POST"]
+            origin: process.env.DOMAIN, // "https://callcenter.net",
+            methods: ["GET", "POST"]
         }
     });
 
