@@ -26,5 +26,9 @@ router.get('/whatsapp/message', Controllertwilio.getMessages); //enviar mensajes
 router.get('/whatsapp/rooms', Controllertwilio.getRoomUsers); // enviar la lista de rooms de whatsapp
 router.post('/whatsapp/send-file', Controllertwilio.sendUploadFile);
 
+
+/* Route Galery */
+router.post('/galery/file', Controllertwilio.sendUploadFile);
+
 module.exports = router;
 // export default router;

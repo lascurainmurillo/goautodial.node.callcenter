@@ -109,7 +109,6 @@ const sendUploadFile = async(req, res) => {
     console.log("--------------- SUBIENDO ARCHIVOS ------------------- ");
     console.log(req.files);
     // req.socket.setTimeout(5 * 60 * 1000); // subir el tiempo de carga del socket
-    // console.log(req.type);
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).send('No files were uploaded.');
     }
