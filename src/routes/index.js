@@ -28,7 +28,10 @@ router.post('/whatsapp/send-file', Controllertwilio.sendUploadFile);
 
 
 /* Route Galery */
-router.post('/galery/file', Controllertwilio.sendUploadFile);
+const Controllergalery = require('../controllers/galery.js');
+router.post('/galery/file', Controllergalery.postUploadGalery);
+router.get('/galery/file', Controllergalery.index);
+router.delete('/galery/file/:id', Controllergalery.deletefile);
 
 module.exports = router;
 // export default router;
