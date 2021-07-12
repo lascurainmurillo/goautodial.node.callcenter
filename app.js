@@ -1,12 +1,3 @@
-/*
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import allroutes from './src/routes/index.js';
-import connection from './database/db.js';
-*/
-
 // definir variables de entorno
 const dotenv = require('dotenv');
 dotenv.config({ path: './env/.env' });
@@ -63,7 +54,7 @@ app.use('/', (req, res) => {
 let server = http.createServer(app);
 
 // certificate
-let httpsServer = require('./certificate').httpsServer(app);
+// let httpsServer = require('./certificate').httpsServer(app);
 
 // Sockets
 const sockets_c = require('./src/service/socketsService').socket_connection(server, app);
@@ -73,4 +64,4 @@ const sockets_c = require('./src/service/socketsService').socket_connection(serv
 server.listen(port, () => console.log(`Servidor ejecutandose en el puerto: ${process.env.DOMAIN}`));
 
 // levantar el servidor https
-httpsServer.listen(port_https, 'localhost', () => console.log(`Servidor ejecutandose en el puerto: https:// ${process.env.DOMAIN}`));
+// httpsServer.listen(port_https, 'localhost', () => console.log(`Servidor ejecutandose en el puerto: https:// ${process.env.DOMAIN}`));

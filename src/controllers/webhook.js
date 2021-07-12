@@ -136,7 +136,7 @@ const postWebhookFace = (req, res) => {
                         list_id,
                         room: socket_phone_number, // phone number
                         message: {
-                            user: dataform.first_name,
+                            user: 'GOAUTODIAL',
                             msg: `Hola ${dataform.first_name}, gracias por enviar tu información, estaremos llamandote en unos momentos.`,
                             tipo: 'sender',
                             caption: null,
