@@ -60,7 +60,9 @@ const saveSendMessageWhat = function(room, dataroom, el, tipo, user, io) {
             msg: el.body,
             tipo, // sender or receiver
             caption: el.caption,
-            send_tipo: el.type
+            send_tipo: el.type,
+            id_tag_chatting: Date.now() + "" + parseInt(Math.random() * 100000),
+            time: Date.now()
         },
     }
 

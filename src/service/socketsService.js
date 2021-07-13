@@ -81,15 +81,18 @@ const socket_connection = (server, app) => {
             }
 
             // emitiendo mensaje al fronend chat
-            io.to(data_call.room).emit('message', { user: data_call.message.user, msg: data_call.message.msg, tipo: data_call.message.tipo, time: Date.now(), caption: null, send_tipo, room: data_call.client_id });
+            io.to(data_call.room).emit('message', {
+                user: data_call.message.user,
+                msg: data_call.message.msg,
+                tipo: data_call.message.tipo,
+                time: Date.now(),
+                caption: null,
+                send_tipo,
+                room: data_call.client_id,
+                id_tag_chatting: data_call.message.id_tag_chatting
+            });
         });
-        /*
-        socket.on('whatss', (data) => {
-            console.log("estoy en whatsssss");
-            console.log(data);
-            io.to(data.room).emit(data);
-        });
-        */
+
         socket.on('disconnect', () => {
             console.log('User was disconnected');
             var self = this;

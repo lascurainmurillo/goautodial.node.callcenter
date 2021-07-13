@@ -15,7 +15,8 @@ const ChatSchema = new Schema({
         tipo: String,
         time: Number,
         caption: String,
-        send_tipo: String
+        send_tipo: String,
+        id_tag_chatting: String,
     },
     created_at: {
         type: Date,
