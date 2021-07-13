@@ -54,7 +54,7 @@ app.use('/', (req, res) => {
 let server = http.createServer(app);
 
 // certificate
-// let httpsServer = require('./certificate').httpsServer(app);
+let httpsServer = require('./certificate').httpsServer(app);
 
 // Sockets
 const sockets_c = require('./src/service/socketsService').socket_connection(server, app);
@@ -64,4 +64,4 @@ const sockets_c = require('./src/service/socketsService').socket_connection(serv
 server.listen(port, () => console.log(`Servidor ejecutandose en el puerto: ${process.env.DOMAIN}`));
 
 // levantar el servidor https
-// httpsServer.listen(port_https, 'localhost', () => console.log(`Servidor ejecutandose en el puerto: https:// ${process.env.DOMAIN}`));
+httpsServer.listen(port_https, 'localhost', () => console.log(`Servidor ejecutandose en el puerto: https:// ${process.env.DOMAIN}`));
