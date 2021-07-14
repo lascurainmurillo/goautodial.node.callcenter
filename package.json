@@ -29,6 +29,7 @@
         "facebook-nodejs-business-sdk": "^10.0.0",
         "fb": "^2.0.0",
         "handlebars": "^4.7.7",
+        "jsonwebtoken": "^8.5.1",
         "moment": "^2.29.1",
         "mongoose": "^5.12.12",
         "mysql": "^2.18.1",

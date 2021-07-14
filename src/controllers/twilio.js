@@ -48,6 +48,8 @@ const whatReceiver = (req, res) => {
 
 const saveSendMessageWhat = function(room, dataroom, el, tipo, user, io) {
     console.log(" ---------------------- ENTREEEEEE ------------------------ ");
+
+    var id_tag_chatting = Date.now() + "" + parseInt(Math.random() * 100000); // id para el tag de chatting html
     // guardar mensaje en mongo
     const data_call = {
         // agent_username: dataroom[0].agent_username,
@@ -61,7 +63,7 @@ const saveSendMessageWhat = function(room, dataroom, el, tipo, user, io) {
             tipo, // sender or receiver
             caption: el.caption,
             send_tipo: el.type,
-            id_tag_chatting: Date.now() + "" + parseInt(Math.random() * 100000),
+            id_tag_chatting,
             time: Date.now()
         },
     }
@@ -71,8 +73,7 @@ const saveSendMessageWhat = function(room, dataroom, el, tipo, user, io) {
     chatmodel.saveMessage(null, data_call);
 
     // Emitir mensajes al dashboard Agent
-    io.sockets.to(room).emit('message', { user, msg: el.body, tipo, time: Date.now(), caption: el.caption, send_tipo: el.type, room });
-    // io.emit('whatss', { user: data_call.client_name, msg: el.body, type: 'receiver', time: moment().format('h:mm a'), room });
+    io.sockets.to(room).emit('message', { user, msg: el.body, tipo, time: Date.now(), caption: el.caption, send_tipo: el.type, room, id_tag_chatting });
 }
 
 /**
@@ -125,21 +126,8 @@ const sendUploadFile = async(req, res) => {
 }
 
 
-const whatReceiver1 = (req, res) => {
-    res.sendStatus(200);
-}
-
-const whatSend = (req, res) => {
-    console.log("-------------------- EN WHAT ENVIENDO --------------------");
-    // console.log(req.body);
-    chatapi.sendMessageWhat('+51955794343', 'Agent', 'Your TV order of 273723 has shipped and should be delivered on now. Details: More soon');
-    res.sendStatus(200);
-}
-
 module.exports = {
     whatReceiver: whatReceiver,
-    whatReceiver1: whatReceiver1,
-    whatSend: whatSend,
     getMessages: getMessages,
     getRoomUsers: getRoomUsers,
     sendUploadFile: sendUploadFile

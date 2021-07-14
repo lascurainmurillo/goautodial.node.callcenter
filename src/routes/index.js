@@ -1,14 +1,16 @@
-/*
-import express from 'express';
-import { getWebhook } from '../controllers/webhook.js';
-*/
-
 const express = require('express');
 const router = express.Router();
+
+const jwtMiddleware = require('../middleware/jwtMiddleware');
+
 
 /* index */
 const ControllerIndex = require('../controllers/index');
 router.get('/', ControllerIndex.getIndex);
+
+/* user */
+const ControllerUser = require('../controllers/userController');
+router.route('/user/verifytoken').post(jwtMiddleware.verifytoken, ControllerUser.verifytoken);
 
 /* Route webhook*/
 const ConTrollerWebhook = require('../controllers/webhook');
@@ -19,19 +21,16 @@ router.post('/webhookinst', ConTrollerWebhook.postWebhookInst);
 
 /* Route twilio */
 const Controllertwilio = require('../controllers/twilio.js');
-router.post('/whatsapp/receiver', Controllertwilio.whatReceiver); //recibe mensaje whatsapp de un numero externo
-router.post('/whatsapp/receiver1', Controllertwilio.whatReceiver1);
-router.get('/whatsapp/send', Controllertwilio.whatSend);
-router.get('/whatsapp/message', Controllertwilio.getMessages); //enviar mensajes anteriores de whatsapp
-router.get('/whatsapp/rooms', Controllertwilio.getRoomUsers); // enviar la lista de rooms de whatsapp
-router.post('/whatsapp/send-file', Controllertwilio.sendUploadFile);
-
+router.post('/whatsapp/receiver', Controllertwilio.whatReceiver); //recibe mensaje whatsapp de un numero externo / chat-api
+router.route('/whatsapp/message').get(jwtMiddleware.verifytoken, Controllertwilio.getMessages); // enviar la lista de rooms de whatsapp
+router.route('/whatsapp/rooms').get(jwtMiddleware.verifytoken, Controllertwilio.getRoomUsers); // enviar la lista de rooms de whatsapp
+router.route('/whatsapp/send-file').post(jwtMiddleware.verifytoken, Controllertwilio.sendUploadFile); // enviar la lista de rooms de whatsapp
 
 /* Route Galery */
 const Controllergalery = require('../controllers/galery.js');
-router.post('/galery/file', Controllergalery.postUploadGalery);
-router.get('/galery/file', Controllergalery.index);
-router.delete('/galery/file/:id', Controllergalery.deletefile);
+router.route('/galery/file').post(jwtMiddleware.verifytoken, Controllergalery.postUploadGalery);
+router.route('/galery/file').get(jwtMiddleware.verifytoken, Controllergalery.index);
+router.route('/galery/file/:id').delete(jwtMiddleware.verifytoken, Controllergalery.deletefile);
 
 module.exports = router;
 // export default router;
