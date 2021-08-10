@@ -59,7 +59,6 @@ let httpsServer = require('./certificate').httpsServer(app);
 // Sockets
 const sockets_c = require('./src/service/socketsService').socket_connection(server, app);
 
-
 // Levantar el servidor http
 server.listen(port, () => console.log(`Servidor ejecutandose en el puerto: ${process.env.DOMAIN}`));
 
