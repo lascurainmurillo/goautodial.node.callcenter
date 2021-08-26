@@ -92,7 +92,7 @@ const postWebhookFace = (req, res) => {
 
                 dataform['entry_date'] = entry_date; // `${yyyy}-${mm}-${dd} ${ho}:${mi}:${se}`;
                 dataform['status'] = 'NEW';
-                dataform['list_id'] = '1004'; // falta considerar este dato OJO
+                dataform['list_id'] = list_id; // falta considerar este dato OJO
                 dataform['gmt_offset_now'] = -6.00; // obtener segun el codigo postal o el pais
                 dataform['last_local_call_time'] = '0000-00-00 00:00:00';
                 dataform['social_form_id'] = elchange.value.form_id; // id del formulario de facebook
